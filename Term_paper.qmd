@@ -68,9 +68,63 @@ key points of the work.
 
 \pagenumbering{arabic}
 
-[@wager2018]
+One of the most important tasks in economics, medicine, statistics, and many other disciplines is estimating the causal effect of a treatment or intervention. Assuming that a treatment's impact is largely consistent across people and observations, a large portion of the literature has historically concentrated on estimating average treatment effects (ATEs). However, on many different scenarios, the effects of some sort of treatment are intrinsically heterogeneous, which means that they differ greatly among various groups or subpopulations. For instance, a novel medical intervention might be effective for younger patients but ineffective for elderly patients. Similarly, an educational program may have little effect on high achievers but improve results for students with inadequate prior preparation. 
 
-# Paper
+\qquad The development of adaptable techniques that can reveal individual differences in treatment response has been spurred by the growing interest in these so-called \textbf{heterogeneous treatment effects}. However, there are a number of difficulties in precisely estimating them. In high-dimensional settings or when the form of heterogeneity is complex, traditional statistical techniques like regression with interaction terms or subgroup analysis can lose their reliability. Moreover, a lot of machine learning techniques are very good at forecasting results, but they are not made for drawing conclusions about causality, and they usually don't have reliable instruments for measuring uncertainty.
+
+\qquad In response to this
+methodological gap, @wager2018
+propose the
+\textbf{causal forest}, an
+adaptation of Breiman’s random
+forest algorithm
+[@breiman2001] tailored for
+the estimation of \textbf{conditional
+average treatment effects} (or
+CATEs). Their approach not
+only offers the flexibility of
+nonparametric machine learning
+but also provides a
+theoretical framework for
+statistical inference,
+including confidence intervals
+for individual treatment
+effects. This is made possible
+through key innovations such
+as the use of honest trees,
+which separate the data used
+for tree construction from the
+data used for estimation, and
+a variance estimation
+technique based on the
+infinitesimal jackknife for
+random forests developed by
+@wager2013.
+
+\qquad The causal forest method
+thus represents a significant
+advancement in the field of
+causal inference. It bridges
+the gap between machine
+learning’s ability to capture
+complex relationships and the
+statistical rigor needed for
+credible statistical
+inference.
+
+\qquad The remainder of this
+term paper will provide a
+detailed overview of Wager and
+Athey’s methodology, the
+theoretical guarantees
+supporting causal forests,
+empirical performance as
+demonstrated in an empirical
+example, and a discussion of
+the method’s limitations and
+potential extensions.
+
+# Original Paper
 
 # Empirical Analysis
 
