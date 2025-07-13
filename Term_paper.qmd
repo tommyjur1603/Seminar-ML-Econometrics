@@ -46,31 +46,72 @@ bibliography: references.bib
 
 \pagenumbering{roman}
 
-# Abstract {.unnumbered}
-
-This is the abstract of the
-thesis. It provides a brief
-overview of the research
-conducted, the methods used,
-and the main findings. The
-abstract should be concise and
-informative, summarizing the
-key points of the work.
-
-\listoftables
-\addcontentsline{toc}{chapter}{\listtablename}
-\listoffigures
-\addcontentsline{toc}{chapter}{\listfigurename}
-
 \tableofcontents
 
-# Introduction
+# Introduction {#sec-intro}
 
 \pagenumbering{arabic}
 
-One of the most important tasks in economics, medicine, statistics, and many other disciplines is estimating the causal effect of a treatment or intervention. Assuming that a treatment's impact is largely consistent across people and observations, a large portion of the literature has historically concentrated on estimating average treatment effects (ATEs). However, on many different scenarios, the effects of some sort of treatment are intrinsically heterogeneous, which means that they differ greatly among various groups or subpopulations. For instance, a novel medical intervention might be effective for younger patients but ineffective for elderly patients. Similarly, an educational program may have little effect on high achievers but improve results for students with inadequate prior preparation. 
+One of the most important
+tasks in economics, medicine,
+statistics, and many other
+disciplines is estimating the
+causal effect of a treatment
+or intervention. Assuming that
+a treatment's impact is
+largely consistent across
+people and observations, a
+large portion of the
+literature has historically
+concentrated on estimating
+average treatment effects
+(ATEs). However, on many
+different scenarios, the
+effects of some sort of
+treatment are intrinsically
+heterogeneous, which means
+that they differ greatly among
+different individuals,
+observations or sub-groups.
+For instance, a newly
+developed medical intervention
+might be effective for younger
+patients but ineffective for
+elderly patients, or its
+effect might be different for
+men than it is for women.
+Similarly, an educational
+program may have little effect
+on high achievers but improve
+results for students with
+inadequate prior preparation.
 
-\qquad The development of adaptable techniques that can reveal individual differences in treatment response has been spurred by the growing interest in these so-called \textbf{heterogeneous treatment effects}. However, there are a number of difficulties in precisely estimating them. In high-dimensional settings or when the form of heterogeneity is complex, traditional statistical techniques like regression with interaction terms or subgroup analysis can lose their reliability. Moreover, a lot of machine learning techniques are very good at forecasting results, but they are not made for drawing conclusions about causality, and they usually don't have reliable instruments for measuring uncertainty.
+\qquad The development of
+adaptable techniques that can
+reveal individual differences
+in treatment response has been
+spurred by the growing
+interest in these so-called
+\textbf{heterogeneous treatment effects}.
+However, there are a number of
+difficulties in precisely
+estimating them. In
+high-dimensional settings or
+when the form of heterogeneity
+is complex, traditional
+statistical techniques like
+regression with interaction
+terms or subgroup analysis can
+lose their reliability.
+Moreover, a lot of machine
+learning techniques are very
+good at predicting results,
+but they are not made for
+drawing conclusions about
+causality, and they usually
+don't have reliable
+instruments for measuring
+uncertainty.
 
 \qquad In response to this
 methodological gap, @wager2018
@@ -79,7 +120,8 @@ propose the
 adaptation of Breiman’s random
 forest algorithm
 [@breiman2001] tailored for
-the estimation of \textbf{conditional
+the estimation of
+\textbf{conditional
 average treatment effects} (or
 CATEs). Their approach not
 only offers the flexibility of
@@ -91,42 +133,281 @@ including confidence intervals
 for individual treatment
 effects. This is made possible
 through key innovations such
-as the use of honest trees,
-which separate the data used
-for tree construction from the
-data used for estimation, and
-a variance estimation
-technique based on the
-infinitesimal jackknife for
-random forests developed by
-@wager2013.
+as the use of \textbf{honest}
+trees, which separate the data
+used for tree construction
+from the data used for
+estimation, and a consistent
+variance estimation technique
+based on the infinitesimal
+jackknife for random forests
+developed by @wager2013.
 
-\qquad The causal forest method
-thus represents a significant
-advancement in the field of
-causal inference. It bridges
-the gap between machine
-learning’s ability to capture
-complex relationships and the
-statistical rigor needed for
-credible statistical
-inference.
+\qquad The causal forest
+method thus represents a
+significant advancement in the
+field of causal inference. It
+bridges the gap between
+machine learning’s ability to
+capture complex relationships
+and the statistical rigor
+needed for credible
+statistical inference.
 
-\qquad The remainder of this
-term paper will provide a
-detailed overview of Wager and
-Athey’s methodology, the
-theoretical guarantees
-supporting causal forests,
-empirical performance as
-demonstrated in an empirical
-example, and a discussion of
-the method’s limitations and
-potential extensions.
+\qquad The remainder of this term
+paper will provide a detailed
+overview of Wager and Athey’s
+methodology, the theoretical
+guarantees supporting causal
+forests, empirical performance
+as demonstrated in an
+empirical example, and a
+discussion of the method’s
+limitations and potential
+extensions.
 
-# Original Paper
+## Literature Review
+
+# Methodology Overview
+
+Following the motivation
+outlined in @sec-intro, this
+second chapter introduces the
+methodology developed by
+@wager2018: the
+\textbf{causal forest}. This
+method builds upon the
+traditional machine learning
+technique, the random forest,
+in order to estimate
+heterogeneous treatment
+effects in a flexible and
+statistically principled way.
+
+## Defining Causal Forests {#sec-causal-forests}
+
+### Estimating Conditional Average Treatment Effects
+
+Estimating the Conditional
+Average Treatment Effect
+(CATE), which is defined as
+\begin{equation} \label{eq:1}
+\tau(x) = \mathbb{E}[Y(1) - Y(0) | X = x],
+\end{equation} is a common
+goal in causal inference.
+Here, $Y(1)$ and $Y(0)$
+represent the potential
+outcomes under treatment and
+control, respectively, and $X$
+is a vector of observed
+covariates. The objective is
+to estimate the expected
+causal effect of receiving the
+treatment for any individuals
+with a given set of
+characteristics $X = x$.
+However, estimating $\tau(x)$
+is inherently challenging
+because only one of the two
+potential outcomes is observed
+for each individual, since
+each person can only be either
+treated or not treated. To
+make the estimation feasible,
+the standard assumptions of
+\textbf{unconfoundedness} and
+\textbf{overlap} are imposed:
+
+-   **Unconfoundedness**:
+    According to this
+    assumption, the treatment
+    assignment is essentially
+    random, conditional on the
+    covariates $X$, and is
+    independent of the
+    potential outcomes, i.e.,
+    $Y(1), Y(0) \perp W | X$,
+    meaning that treatment
+    assignment $W$,
+    conditional on covariates
+    $X$, is essentially
+    random.
+
+-   **Overlap**: For every
+    covariate $x$, both
+    treated and control units
+    are observed because the
+    probability of receiving
+    treatment is positive for
+    all values of $X$ but not
+    equal to 1, i.e.,
+    $0 < \mathbb{P}(W = 1 | X = x) < 1$
+    for all $x$, ensuring that
+    both treated and control
+    units are observed for
+    every covariate $x$.
+
+The CATE $\tau(x)$ can now be
+estimated from the observed
+data because of these
+assumptions, which enable us
+to treat observational data as
+though it had originated from
+a randomized experiment,
+conditional on covariates.
+
+### Causal Trees
+
+The decision tree, a popular
+and extensively used machine
+learning algorithm that
+recursively splits the
+covariate space into disjoint
+regions (also called
+"leaves"), within which a
+basic model is applied, is a
+logical place to start.
+Conventional regression trees
+are designed to forecast
+outcomes rather than estimate
+causal effects. Causal trees,
+on the other hand, are
+intended to directly estimate
+treatment effects. The
+difference in average outcomes
+between treated and control
+units is used to estimate the
+treatment effect in each leaf:
+\begin{equation} \label{eq:2}
+\hat{\tau}(x) = \left( \frac{1}{n_1} \sum_{i: W_i = 1, X_i \in L} Y_i \right) - \left( \frac{1}{n_0} \sum_{i: W_i = 0, X_i \in L} Y_i \right),
+\end{equation} where $L$ is
+the leaf that contains the
+covariate $x$, $n_1$ is the
+number of treated units in
+leaf $L$, and $n_0$ is the
+number of control units in
+leaf $L$. It is crucial to
+note that, because of the
+unconfoundedness assumption,
+we can simply calculate the
+difference in average outcomes
+between treated and control
+units, and this difference
+would recover a causal effect.
+Without this assumption, the
+difference in observed
+outcomes would not necessarily
+reflect the true causal
+effect, as there could be
+confounding factors that
+influence both treatment
+assignment and outcomes.
+
+\qquad Although causal trees
+offer flexible estimates of
+the localized effects of
+treatments, a single tree is
+highly sensitive to data
+perturbations and prone to
+high variance, as is well
+known from traditional machine
+learning. The causal forest
+algorithm is based on an
+ensemble of trees that are
+used to assess this problem.
+
+### Causal Forests
+
+A causal forest is an ensemble
+of many causal trees, each
+built on a random subsample of
+the data. By aggregating the
+treatment effect estimates
+from many such trees, causal
+forests reduce variance and
+produce more stable treatment
+effect estimates. Formally,
+the causal forest estimator is
+given by:
+\begin{equation} \label{eq:3}
+\hat{\tau}(x) = \frac{1}{B} \sum_{b=1}^{B} \hat{\tau}_b(x),
+\end{equation} where
+$\hat{\tau}_b(x)$ is the
+treatment effect estimate from
+the $b$-th causal tree, and
+$B$ is the total number of
+trees grown in the forest.
+
+\qquad However, an important
+issue arises in the
+construction of causal trees
+and forests. If the same data
+is used both to determine the
+tree structure (i.e., the
+locations of splits) and to
+estimate treatment effects
+within the resulting leaf
+nodes, the resulting estimates
+may suffer from overfitting.
+This is especially problematic
+for inference, since
+overfitting would lead to
+biased treatment effect
+estimates. More critically,
+this kind of bias would
+undermine the validity of any
+subsequent statistical
+inference, resulting in
+invalid and unreliable
+confidence intervals.
+
+### Honest Trees
+
+To address this problem,
+@wager2018 introduce the
+concept of \textbf{honest}
+trees, a design choice that
+separates the tasks of model
+selection and estimation.
+
+\textbf{Definition 1 (Honest Trees)}[^1]:
+\textit{A tree is called \textbf{honest} if it uses separate subsamples for two distinct purposes:}
+
+[^1]: This definition is
+    adapted from @wager2018.
+
+-   \textit{One subsample is used to
+    determine the tree
+    structure, that is, where
+    to place the splits,}
+
+-   \textit{The other is used to
+    estimate the treatment
+    effects within each leaf.}
+    
+This separation prevents the model from overfitting during tree construction, ensuring that the treatment effect estimates remain unbiased. 
+
+\qquad Honesty can be implemented in various ways. However, in causal forests, @wager2018 suggest the implementation of honest trees through the so-called "double-sample" approach, where each subsample used to grow a causal tree is split into two halves: one half for splitting and tree growing, one the other half for the estimation of treatment effects.
+
+## Asymptotic Theory
+
+As we have seen in @sec-causal-forests, causal forests provide a very flexible and nonparametric method for estimating heterogeneous treatment effects. However, the main theoretical contribution of causal forests is that they permit valid statistical inference. The well-developed asymptotic theory of causal forests ensures both consistency and asymptotic normality of the treatment effect estimates under appropriate conditions and assumptions, in contrast to the majority of machine learning techniques, which are mainly optimized for prediction and do not provide uncertainty quantification. The main theoretical findings in favor of using causal forests for statistical inference are presented in this chapter.
+
+### Consistency of the Estimator
+
+The first fundamental result of @wager2018 is \textbf{pointwise consistency}. This result guarantees that, as the sample size $n$ increases to infinity, the treatment effect estimator $\hat{\tau}(x)$ converges in probability to the true conditional average treatment effect $\tau(x)$ for any fixed covariate $x \in X$, i.e.,
+\begin{equation} \label{eq:4}
+\hat{\tau}(x) \xrightarrow{p} \tau(x) \quad \text{as} \quad n \to \infty.
+\end{equation}
+This result is very important because it ensures that the causal forest estimator will recover the correct treatment effects at each data point $x$ as the sample size grows, making it a reliable tool for statistical inference. To achieve pointwise consistency, one additional assumption is needed, and that is that both conditional mean functions $\mathbb{E}[ Y(0) | X = x ]$ and $\mathbb{E}[ Y(1) | X = x ]$ are Lipschnitz-continuous. 
+
+### Asymptotic Normality
+
+
 
 # Empirical Analysis
+
+[@davis2017]
 
 # Discussion
 
