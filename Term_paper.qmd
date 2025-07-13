@@ -154,17 +154,17 @@ and the statistical rigor
 needed for credible
 statistical inference.
 
-\qquad The remainder of this term
-paper will provide a detailed
-overview of Wager and Athey’s
-methodology, the theoretical
-guarantees supporting causal
-forests, empirical performance
-as demonstrated in an
-empirical example, and a
-discussion of the method’s
-limitations and potential
-extensions.
+\qquad The remainder of this
+term paper will provide a
+detailed overview of Wager and
+Athey’s methodology, the
+theoretical guarantees
+supporting causal forests,
+empirical performance as
+demonstrated in an empirical
+example, and a discussion of
+the method’s limitations and
+potential extensions.
 
 ## Literature Review
 
@@ -376,34 +376,174 @@ selection and estimation.
 [^1]: This definition is
     adapted from @wager2018.
 
--   \textit{One subsample is used to
+-   
+
+    \textit{One subsample is used to
     determine the tree
     structure, that is, where
     to place the splits,}
 
--   \textit{The other is used to
+-   
+
+    \textit{The other is used to
     estimate the treatment
     effects within each leaf.}
-    
-This separation prevents the model from overfitting during tree construction, ensuring that the treatment effect estimates remain unbiased. 
 
-\qquad Honesty can be implemented in various ways. However, in causal forests, @wager2018 suggest the implementation of honest trees through the so-called "double-sample" approach, where each subsample used to grow a causal tree is split into two halves: one half for splitting and tree growing, one the other half for the estimation of treatment effects.
+This separation prevents the
+model from overfitting during
+tree construction, ensuring
+that the treatment effect
+estimates remain unbiased.
+
+\qquad Honesty can be
+implemented in various ways.
+However, in causal forests,
+@wager2018 suggest the
+implementation of honest trees
+through the so-called
+"double-sample" approach,
+where each subsample used to
+grow a causal tree is split
+into two halves: one half for
+splitting and tree growing,
+one the other half for the
+estimation of treatment
+effects.
 
 ## Asymptotic Theory
 
-As we have seen in @sec-causal-forests, causal forests provide a very flexible and nonparametric method for estimating heterogeneous treatment effects. However, the main theoretical contribution of causal forests is that they permit valid statistical inference. The well-developed asymptotic theory of causal forests ensures both consistency and asymptotic normality of the treatment effect estimates under appropriate conditions and assumptions, in contrast to the majority of machine learning techniques, which are mainly optimized for prediction and do not provide uncertainty quantification. The main theoretical findings in favor of using causal forests for statistical inference are presented in this chapter.
+As we have seen in
+@sec-causal-forests, causal
+forests provide a very
+flexible and nonparametric
+method for estimating
+heterogeneous treatment
+effects. However, the main
+theoretical contribution of
+causal forests is that they
+permit valid statistical
+inference. The well-developed
+asymptotic theory of causal
+forests ensures both
+consistency and asymptotic
+normality of the treatment
+effect estimates under
+appropriate conditions and
+assumptions, in contrast to
+the majority of machine
+learning techniques, which are
+mainly optimized for
+prediction and do not provide
+uncertainty quantification.
+The main theoretical findings
+in favor of using causal
+forests for statistical
+inference are presented in
+this chapter.
 
 ### Consistency of the Estimator
 
-The first fundamental result of @wager2018 is \textbf{pointwise consistency}. This result guarantees that, as the sample size $n$ increases to infinity, the treatment effect estimator $\hat{\tau}(x)$ converges in probability to the true conditional average treatment effect $\tau(x)$ for any fixed covariate $x \in X$, i.e.,
+The first fundamental result
+of @wager2018 is
+\textbf{pointwise consistency}.
+This result guarantees that,
+as the sample size $n$
+increases to infinity, the
+treatment effect estimator
+$\hat{\tau}(x)$ converges in
+probability to the true
+conditional average treatment
+effect $\tau(x)$ for any fixed
+covariate $x \in X$, i.e.,
 \begin{equation} \label{eq:4}
 \hat{\tau}(x) \xrightarrow{p} \tau(x) \quad \text{as} \quad n \to \infty.
-\end{equation}
-This result is very important because it ensures that the causal forest estimator will recover the correct treatment effects at each data point $x$ as the sample size grows, making it a reliable tool for statistical inference. To achieve pointwise consistency, one additional assumption is needed, and that is that both conditional mean functions $\mathbb{E}[ Y(0) | X = x ]$ and $\mathbb{E}[ Y(1) | X = x ]$ are Lipschnitz-continuous. 
+\end{equation} This result is
+very important because it
+ensures that the causal forest
+estimator will recover the
+correct treatment effects at
+each data point $x$ as the
+sample size grows, making it a
+reliable tool for statistical
+inference. To achieve
+pointwise consistency, one
+additional assumption is
+needed, and that is that both
+conditional mean functions
+$\mathbb{E}[ Y(0) | X = x ]$
+and
+$\mathbb{E}[ Y(1) | X = x ]$
+are Lipschnitz-continuous.
 
 ### Asymptotic Normality
 
+The second fundamental result
+of @wager2018 is
+\textbf{asymptotic normality}.
+This result states that, under
+certain conditions, the
+treatment effect estimator
+$\hat{\tau}(x)$ is
+asymptotically normally
+distributed around the true
+treatment effect $\tau(x)$.
 
+\textbf{Theorem 1 (Asymptotic Normality)}[^2]:
+
+[^2]: This theorem is adapted
+    from @wager2018.
+
+\textit{Let $(\textbf{X}_i, Y_i, W_i)_{i=1}^n$ be $n$ i.i.d. training examples, where:}
+
+-   \textit{$\textbf{X}_i \in [0,1]^d$ are the covariates,}
+
+-   \textit{$Y_i \in \mathbb{R}$ is the observed outcomes,}
+
+-   \textit{$W_i \in \{0,1\}$ indicates the binary treatment assignment.}
+
+\textit{Suppose that these training examples satisfy the following conditions:}
+
+-   \textit{The treatment assignment $W_i$ is unconfounded and has overlap,}
+
+-   \textit{The conditional means $\mathbb{E}[ Y(0) | \textbf{X} = x ]$ and $\mathbb{E}[ Y(1) | \textbf{X} = x ]$ are Lipschitz-continuous,}
+
+-   \textit{The conditional variance is bounded, i.e.}
+    $\text{sup}_x \text{Var} (Y | \textbf{X} = x) < \infty$.
+
+-   \textit{The covariates are \textbf{independent} and \textbf{uniformly distributed}, i.e. $\textbf{X}_i \sim \mathcal{U}([0,1]^d)$.}
+
+\textit{Given these conditions, let $\Gamma$ be an \textbf{honest} causal forest, where:}
+
+-   \textit{Each causal tree is built on a random subsample of size $s_n \propto n^\beta$ for some $\beta_{min} < \beta < 1$, where $\beta_{min}$ depends on covariate dimension $d$ and regularity parameter $\alpha$,}
+
+-   \textit{each causal tree is $𝛂$\textbf{-regular}, meaning that every split sends at least an $\alpha$-fraction of the subsample to each child node (in this case, $\alpha \le 0.2$ is used),}
+
+\textit{Then, for any fixed covariate $x \in [0,1]^d$, the treatment effect estimator $\hat{\tau}(x)$ is \textbf{asymptotically normal} and \textbf{centered}. That is:}
+\begin{equation} \label{eq:5}
+\frac{\left(\hat{\tau}(x) - \tau(x)\right)}{\sqrt{\text{Var}\left(\hat{\tau}(x)\right)}} \xrightarrow{d} \mathcal{N}(0,1) \quad \text{as} \quad n \to \infty.
+\end{equation}
+\textit{Furthermore, the infinitesimal jackknife}[^3]
+\textit{(IJ) variance estimator, which is defined as:}
+\begin{equation} \label{eq:6}
+\hat{V}_{IJ}(x) = \frac{n-1}{n}\left(\frac{n}{n-s}\right)^2 \sum_{i=1}^{n} \left(\text{Cov}_{\ast}\left[\hat{\tau}^{\ast}_{b}(x), N_{ib}^{\ast}\right]\right)^2,
+\end{equation}
+\textit{where $\hat{\tau}^{\ast}_b(x)$ is the treatment effect estimate given by the $b$-th tree, and $N_{ib}^{\ast} \in \{0,1\}$ indicates whether the training example $i$ was used for the $b$-th tree, is a consistent estimator of the variance, in the sense that:}
+\begin{equation} \label{eq:7}
+\frac{\hat{V}_{IJ}(x)}{\text{Var}(\hat{\tau}(x))} \xrightarrow{p} 1
+\quad \text{as} \quad n \to \infty.
+\end{equation}
+
+[^3]: The infinitesimal
+    jackknife is the name of a variance
+    estimation method for random
+    forests developed by @efron2014 and @wager2013.
+    
+\qquad This result establishes causal forests as a method suitable not only for the flexible, nonparametric estimation of heterogeneous treatment effects, but also for conducting \textbf{asymptotically valid statistical inference}. The asymptotic normality of the estimator enables the construction of confidence intervals around the estimated treatment effect at each point $x$, thereby allowing researchers to quantify uncertainty in a principled way, i.e.
+\begin{equation} \label{eq:8}
+\hat{\tau}(x) \pm z_{1 - \frac{\alpha}{2}} \cdot \sqrt{\hat{V}_{IJ}(x)},
+\end{equation} where $z_{\alpha/2}$ is the critical value from the standard normal distribution corresponding to the desired confidence level.
+
+\qquad However, the conditions and assumptions that underlie the causal forest construction in \textbf{Theorem 1} are crucial to the asymptotic normality result. For instance, the estimator may become biased if the honesty condition is broken, which would mean that the same data is used to estimate treatment effects within leaves as well as to choose tree splits. Confidence intervals may become invalid as a result of this bias, which compromises the central limit theorem that underpins sound inference. Consequently, the method's theoretical guarantees, such as consistency and reliable statistical inference, might no longer be valid in the absence of these structural safeguards.
 
 # Empirical Analysis
 
