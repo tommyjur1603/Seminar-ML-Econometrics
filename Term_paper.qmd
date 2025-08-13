@@ -26,7 +26,7 @@ format:
     toc-title: "Contents"
     number-sections: true
     colorlinks: false
-    documentclass: scrreprt
+    documentclass: article
     classoption: oneside
     keep-tex: true
     papersize: A4
@@ -47,6 +47,8 @@ bibliography: references.bib
 \pagenumbering{roman}
 
 \tableofcontents
+
+\newpage
 
 # Introduction {#sec-intro}
 
@@ -129,21 +131,20 @@ nonparametric machine learning
 but also provides a
 theoretical framework for
 statistical inference,
-including confidence intervals
-for individual treatment
-effects. This is made possible
-through key innovations such
-as the use of \textbf{honest}
-trees, which separate the data
-used for tree construction
-from the data used for
-estimation, and a consistent
-variance estimation technique
-based on the infinitesimal
-jackknife for random forests
-developed by @wager2013.
-
-\qquad The causal forest
+including pointwise confidence
+intervals for individual
+treatment effects. This is
+made possible through key
+innovations such as the use of
+\textbf{honest} trees, which
+separate the data used for
+tree construction from the
+data used for estimation, and
+a consistent variance
+estimation technique based on
+the infinitesimal jackknife
+for random forests developed
+by @wager2013. The causal forest
 method thus represents a
 significant advancement in the
 field of causal inference. It
@@ -167,6 +168,84 @@ the method’s limitations and
 potential extensions.
 
 ## Literature Review
+
+Following the development of
+causal forests, a number of
+studies have explored their
+application, refinement, and
+theoretical foundations.
+@athey2019 applied the method
+to education data,
+highlighting practical
+considerations such as
+accounting for clustered
+errors and discussing how
+causal forests use propensity
+scores to be more robust to
+confounding. @davis2017
+demonstrated its usefulness in
+randomized trials for youth
+employment programs, using
+estimated CATEs to identify
+subgroups with the largest
+responses to the intervention,
+and @lechner2018 proposed
+modifications to extend the
+causal forest framework to
+models involving multiple
+treatments, enhancing
+flexibility in policy
+evaluation and stratified
+causal effect estimation.
+
+\qquad Further theoretical and
+applied developments have
+broadened the scope of the
+method. @gavrilova2025
+developed a
+difference-in-differences
+causal forest, which provide
+consistent estimates with a
+parallel trend assumption. The
+methodology has also begun to
+see broader uptake in clinical
+and epidemiological research:
+@susukida2024 used causal
+forests to explore
+heterogeneous treatment
+effects in psychosocial
+interventions for substance
+use disorder, revealing
+nuanced findings like limited
+overall heterogeneity but
+potential subgroup-specific
+effects.
+
+\qquad A particularly important
+recent contribution was made
+by @cattaneo2022, who offer a
+rigorous theoretical
+perspective on recursive
+partitioning methods for
+pointwise inference. They
+demonstrate that adaptive
+(non-honest) trees may fail to
+achieve even polynomial
+convergence rates and can be
+unreliable for inference,
+whereas random forests
+transform weak base learners
+into estimators with near
+optimal convergence properties
+through subsampling and random
+feature selection. Their
+results provide strong
+theoretical justification that
+supports the theoretical
+necessity of honesty,
+subsampling, and randomness
+for pointwise valid causal
+inference via forest methods.
 
 # Methodology Overview
 
@@ -505,7 +584,7 @@ treatment effect $\tau(x)$.
 
 -   \textit{The treatment assignment $W_i$ is unconfounded and has overlap,}
 
--   \textit{The conditional means $\mathbb{E}[ Y(0) | \textbf{X} = x ]$ and $\mathbb{E}[ Y(1) | \textbf{X} = x ]$ are Lipschitz-continuous,}
+-   \textit{The conditional means $\mathbb{E}[ Y(0) | \textbf{X} = x ]$ and $\mathbb{E}[ Y(1) | \textbf{X} = x ]$ are Lipschnitz-continuous,}
 
 -   \textit{The conditional variance is bounded, i.e.}
     $\text{sup}_x \text{Var} (Y | \textbf{X} = x) < \infty$.
@@ -534,20 +613,64 @@ treatment effect $\tau(x)$.
 \end{equation}
 
 [^3]: The infinitesimal
-    jackknife is the name of a variance
-    estimation method for random
-    forests developed by @efron2014 and @wager2013.
-    
-\qquad This result establishes causal forests as a method suitable not only for the flexible, nonparametric estimation of heterogeneous treatment effects, but also for conducting \textbf{asymptotically valid statistical inference}. The asymptotic normality of the estimator enables the construction of confidence intervals around the estimated treatment effect at each point $x$, thereby allowing researchers to quantify uncertainty in a principled way, i.e.
+    jackknife is the name of a
+    variance estimation method
+    for random forests
+    developed by @efron2014
+    and @wager2013.
+
+\qquad This result establishes
+causal forests as a method
+suitable not only for the
+flexible, nonparametric
+estimation of heterogeneous
+treatment effects, but also
+for conducting
+\textbf{asymptotically valid statistical inference}.
+The asymptotic normality of
+the estimator enables the
+construction of confidence
+intervals around the estimated
+treatment effect at each point
+$x$, thereby allowing
+researchers to quantify
+uncertainty in a principled
+way, i.e.
 \begin{equation} \label{eq:8}
 \hat{\tau}(x) \pm z_{1 - \frac{\alpha}{2}} \cdot \sqrt{\hat{V}_{IJ}(x)},
-\end{equation} where $z_{\alpha/2}$ is the critical value from the standard normal distribution corresponding to the desired confidence level.
+\end{equation} where
+$z_{\alpha/2}$ is the critical
+value from the standard normal
+distribution corresponding to
+the desired confidence level.
 
-\qquad However, the conditions and assumptions that underlie the causal forest construction in \textbf{Theorem 1} are crucial to the asymptotic normality result. For instance, the estimator may become biased if the honesty condition is broken, which would mean that the same data is used to estimate treatment effects within leaves as well as to choose tree splits. Confidence intervals may become invalid as a result of this bias, which compromises the central limit theorem that underpins sound inference. Consequently, the method's theoretical guarantees, such as consistency and reliable statistical inference, might no longer be valid in the absence of these structural safeguards.
+\qquad However, the conditions
+and assumptions that underlie
+the causal forest construction
+in \textbf{Theorem 1} are
+crucial to the asymptotic
+normality result. For
+instance, the estimator may
+become biased if the honesty
+condition is broken, which
+would mean that the same data
+is used to estimate treatment
+effects within leaves as well
+as to choose tree splits.
+Confidence intervals may
+become invalid as a result of
+this bias, which compromises
+the central limit theorem that
+underpins sound inference.
+Consequently, the method's
+theoretical guarantees, such
+as consistency and reliable
+statistical inference, might
+no longer be valid in the
+absence of these structural
+safeguards.
 
 # Empirical Analysis
-
-[@davis2017]
 
 # Discussion
 

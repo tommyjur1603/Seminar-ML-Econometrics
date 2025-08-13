@@ -1,0 +1,652 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  12pt,
+  a4paper,
+  oneside]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[]{Times New Roman}
+  \setsansfont[]{Times New Roman}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[top=30mm,bottom=30mm,left=25mm,right=25mm]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{5}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Seminar Term Paper},
+  pdfauthor={Thomas Jürgensen},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Seminar Term Paper}
+\author{Thomas Jürgensen}
+\date{Invalid Date}
+
+\begin{document}
+\begin{titlepage}
+\begin{center}
+
+\Large
+SEMINAR TERM PAPER
+
+\vspace{0.5cm}
+\Large
+LUDWIG-MAXIMILIANS-UNIVERSITÄT MÜNCHEN\\
+DEPARTMENT OF STATISTICS
+
+\vspace{0.5cm}
+
+\rule{\textwidth}{1.5pt}
+\LARGE
+\textbf{Estimation and Inference of Heterogeneous Treatment Effects using Random Forests}
+\rule{\textwidth}{1.5pt}
+
+\vspace{0.5cm}
+
+\Large
+\textbf{Thomas Jürgensen}\\
+\large
+Matriculation Nr.: 12369869
+
+\vspace{0.5cm}
+
+Supervised by Dr. Daniel Wilhelm
+
+\vspace{0.5cm}
+
+\large
+Munich, August 31\textsuperscript{st}, 2025
+      
+\vspace{0.5cm}
+
+%\includegraphics[width = 0.4\textwidth]{sigillum.png}
+
+%\vspace{0.5cm}
+
+\vfill
+
+\end{center}
+\end{titlepage}
+\newpage
+\newpage
+\renewcommand*\contentsname{Contents}
+\setcounter{tocdepth}{3}
+\renewcommand*\listfigurename{List of figures}
+\renewcommand*\listtablename{List of tables}\setstretch{1.5}
+\pagenumbering{roman}
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}\label{sec-intro}
+
+\pagenumbering{arabic}
+
+One of the most important tasks in economics, medicine, statistics, and
+many other disciplines is estimating the causal effect of a treatment or
+intervention. Assuming that a treatment's impact is largely consistent
+across people and observations, a large portion of the literature has
+historically concentrated on estimating average treatment effects
+(ATEs). However, on many different scenarios, the effects of some sort
+of treatment are intrinsically heterogeneous, which means that they
+differ greatly among different individuals, observations or sub-groups.
+For instance, a newly developed medical intervention might be effective
+for younger patients but ineffective for elderly patients, or its effect
+might be different for men than it is for women. Similarly, an
+educational program may have little effect on high achievers but improve
+results for students with inadequate prior preparation.
+
+\qquad The development of adaptable techniques that can reveal
+individual differences in treatment response has been spurred by the
+growing interest in these so-called
+\textbf{heterogeneous treatment effects}. However, there are a number of
+difficulties in precisely estimating them. In high-dimensional settings
+or when the form of heterogeneity is complex, traditional statistical
+techniques like regression with interaction terms or subgroup analysis
+can lose their reliability. Moreover, a lot of machine learning
+techniques are very good at predicting results, but they are not made
+for drawing conclusions about causality, and they usually don't have
+reliable instruments for measuring uncertainty.
+
+\qquad In response to this methodological gap, Wager and Athey (2018)
+propose the \textbf{causal forest}, an adaptation of Breiman's random
+forest algorithm (Breiman 2001) tailored for the estimation of
+\textbf{conditional
+average treatment effects} (or CATEs). Their approach not only offers
+the flexibility of nonparametric machine learning but also provides a
+theoretical framework for statistical inference, including pointwise
+confidence intervals for individual treatment effects. This is made
+possible through key innovations such as the use of \textbf{honest}
+trees, which separate the data used for tree construction from the data
+used for estimation, and a consistent variance estimation technique
+based on the infinitesimal jackknife for random forests developed by
+Wager, Hastie, and Efron (2013). The causal forest method thus
+represents a significant advancement in the field of causal inference.
+It bridges the gap between machine learning's ability to capture complex
+relationships and the statistical rigor needed for credible statistical
+inference.
+
+\qquad The remainder of this term paper will provide a detailed overview
+of Wager and Athey's methodology, the theoretical guarantees supporting
+causal forests, empirical performance as demonstrated in an empirical
+example, and a discussion of the method's limitations and potential
+extensions.
+
+\subsection{Literature Review}\label{literature-review}
+
+Following the development of causal forests, a number of studies have
+explored their application, refinement, and theoretical foundations.
+Athey and Wager (2019) applied the method to education data,
+highlighting practical considerations such as accounting for clustered
+errors and discussing how causal forests use propensity scores to be
+more robust to confounding. Davis and Heller (2017) demonstrated its
+usefulness in randomized trials for youth employment programs, using
+estimated CATEs to identify subgroups with the largest responses to the
+intervention, and Lechner (2018) proposed modifications to extend the
+causal forest framework to models involving multiple treatments,
+enhancing flexibility in policy evaluation and stratified causal effect
+estimation.
+
+\qquad Further theoretical and applied developments have broadened the
+scope of the method. Gavrilova, Langørgen, and Zoutman (2025) developed
+a difference-in-differences causal forest, which provide consistent
+estimates with a parallel trend assumption. The methodology has also
+begun to see broader uptake in clinical and epidemiological research:
+Susukida et al. (2024) used causal forests to explore heterogeneous
+treatment effects in psychosocial interventions for substance use
+disorder, revealing nuanced findings like limited overall heterogeneity
+but potential subgroup-specific effects.
+
+\qquad A particularly important recent contribution was made by
+Cattaneo, Klusowski, and Tian (2022), who offer a rigorous theoretical
+perspective on recursive partitioning methods for pointwise inference.
+They demonstrate that adaptive (non-honest) trees may fail to achieve
+even polynomial convergence rates and can be unreliable for inference,
+whereas random forests transform weak base learners into estimators with
+near optimal convergence properties through subsampling and random
+feature selection. Their results provide strong theoretical
+justification that supports the theoretical necessity of honesty,
+subsampling, and randomness for pointwise valid causal inference via
+forest methods.
+
+\section{Methodology Overview}\label{methodology-overview}
+
+Following the motivation outlined in Section~\ref{sec-intro}, this
+second chapter introduces the methodology developed by Wager and Athey
+(2018): the \textbf{causal forest}. This method builds upon the
+traditional machine learning technique, the random forest, in order to
+estimate heterogeneous treatment effects in a flexible and statistically
+principled way.
+
+\subsection{Defining Causal Forests}\label{sec-causal-forests}
+
+\subsubsection{Estimating Conditional Average Treatment
+Effects}\label{estimating-conditional-average-treatment-effects}
+
+Estimating the Conditional Average Treatment Effect (CATE), which is
+defined as \begin{equation} \label{eq:1}
+\tau(x) = \mathbb{E}[Y(1) - Y(0) | X = x],
+\end{equation} is a common goal in causal inference. Here, \(Y(1)\) and
+\(Y(0)\) represent the potential outcomes under treatment and control,
+respectively, and \(X\) is a vector of observed covariates. The
+objective is to estimate the expected causal effect of receiving the
+treatment for any individuals with a given set of characteristics
+\(X = x\). However, estimating \(\tau(x)\) is inherently challenging
+because only one of the two potential outcomes is observed for each
+individual, since each person can only be either treated or not treated.
+To make the estimation feasible, the standard assumptions of
+\textbf{unconfoundedness} and \textbf{overlap} are imposed:
+
+\begin{itemize}
+\item
+  \textbf{Unconfoundedness}: According to this assumption, the treatment
+  assignment is essentially random, conditional on the covariates \(X\),
+  and is independent of the potential outcomes, i.e.,
+  \(Y(1), Y(0) \perp W | X\), meaning that treatment assignment \(W\),
+  conditional on covariates \(X\), is essentially random.
+\item
+  \textbf{Overlap}: For every covariate \(x\), both treated and control
+  units are observed because the probability of receiving treatment is
+  positive for all values of \(X\) but not equal to 1, i.e.,
+  \(0 < \mathbb{P}(W = 1 | X = x) < 1\) for all \(x\), ensuring that
+  both treated and control units are observed for every covariate \(x\).
+\end{itemize}
+
+The CATE \(\tau(x)\) can now be estimated from the observed data because
+of these assumptions, which enable us to treat observational data as
+though it had originated from a randomized experiment, conditional on
+covariates.
+
+\subsubsection{Causal Trees}\label{causal-trees}
+
+The decision tree, a popular and extensively used machine learning
+algorithm that recursively splits the covariate space into disjoint
+regions (also called ``leaves''), within which a basic model is applied,
+is a logical place to start. Conventional regression trees are designed
+to forecast outcomes rather than estimate causal effects. Causal trees,
+on the other hand, are intended to directly estimate treatment effects.
+The difference in average outcomes between treated and control units is
+used to estimate the treatment effect in each leaf:
+\begin{equation} \label{eq:2}
+\hat{\tau}(x) = \left( \frac{1}{n_1} \sum_{i: W_i = 1, X_i \in L} Y_i \right) - \left( \frac{1}{n_0} \sum_{i: W_i = 0, X_i \in L} Y_i \right),
+\end{equation} where \(L\) is the leaf that contains the covariate
+\(x\), \(n_1\) is the number of treated units in leaf \(L\), and \(n_0\)
+is the number of control units in leaf \(L\). It is crucial to note
+that, because of the unconfoundedness assumption, we can simply
+calculate the difference in average outcomes between treated and control
+units, and this difference would recover a causal effect. Without this
+assumption, the difference in observed outcomes would not necessarily
+reflect the true causal effect, as there could be confounding factors
+that influence both treatment assignment and outcomes.
+
+\qquad Although causal trees offer flexible estimates of the localized
+effects of treatments, a single tree is highly sensitive to data
+perturbations and prone to high variance, as is well known from
+traditional machine learning. The causal forest algorithm is based on an
+ensemble of trees that are used to assess this problem.
+
+\subsubsection{Causal Forests}\label{causal-forests}
+
+A causal forest is an ensemble of many causal trees, each built on a
+random subsample of the data. By aggregating the treatment effect
+estimates from many such trees, causal forests reduce variance and
+produce more stable treatment effect estimates. Formally, the causal
+forest estimator is given by: \begin{equation} \label{eq:3}
+\hat{\tau}(x) = \frac{1}{B} \sum_{b=1}^{B} \hat{\tau}_b(x),
+\end{equation} where \(\hat{\tau}_b(x)\) is the treatment effect
+estimate from the \(b\)-th causal tree, and \(B\) is the total number of
+trees grown in the forest.
+
+\qquad However, an important issue arises in the construction of causal
+trees and forests. If the same data is used both to determine the tree
+structure (i.e., the locations of splits) and to estimate treatment
+effects within the resulting leaf nodes, the resulting estimates may
+suffer from overfitting. This is especially problematic for inference,
+since overfitting would lead to biased treatment effect estimates. More
+critically, this kind of bias would undermine the validity of any
+subsequent statistical inference, resulting in invalid and unreliable
+confidence intervals.
+
+\subsubsection{Honest Trees}\label{honest-trees}
+
+To address this problem, Wager and Athey (2018) introduce the concept of
+\textbf{honest} trees, a design choice that separates the tasks of model
+selection and estimation.
+
+\textbf{Definition 1 (Honest Trees)}\footnote{This definition is adapted
+  from Wager and Athey (2018).}:
+\textit{A tree is called \textbf{honest} if it uses separate subsamples for two distinct purposes:}
+
+\begin{itemize}
+\item
+  \textit{One subsample is used to
+  determine the tree
+  structure, that is, where
+  to place the splits,}
+\item
+  \textit{The other is used to
+  estimate the treatment
+  effects within each leaf.}
+\end{itemize}
+
+This separation prevents the model from overfitting during tree
+construction, ensuring that the treatment effect estimates remain
+unbiased.
+
+\qquad Honesty can be implemented in various ways. However, in causal
+forests, Wager and Athey (2018) suggest the implementation of honest
+trees through the so-called ``double-sample'' approach, where each
+subsample used to grow a causal tree is split into two halves: one half
+for splitting and tree growing, one the other half for the estimation of
+treatment effects.
+
+\subsection{Asymptotic Theory}\label{asymptotic-theory}
+
+As we have seen in Section~\ref{sec-causal-forests}, causal forests
+provide a very flexible and nonparametric method for estimating
+heterogeneous treatment effects. However, the main theoretical
+contribution of causal forests is that they permit valid statistical
+inference. The well-developed asymptotic theory of causal forests
+ensures both consistency and asymptotic normality of the treatment
+effect estimates under appropriate conditions and assumptions, in
+contrast to the majority of machine learning techniques, which are
+mainly optimized for prediction and do not provide uncertainty
+quantification. The main theoretical findings in favor of using causal
+forests for statistical inference are presented in this chapter.
+
+\subsubsection{Consistency of the
+Estimator}\label{consistency-of-the-estimator}
+
+The first fundamental result of Wager and Athey (2018) is
+\textbf{pointwise consistency}. This result guarantees that, as the
+sample size \(n\) increases to infinity, the treatment effect estimator
+\(\hat{\tau}(x)\) converges in probability to the true conditional
+average treatment effect \(\tau(x)\) for any fixed covariate
+\(x \in X\), i.e., \begin{equation} \label{eq:4}
+\hat{\tau}(x) \xrightarrow{p} \tau(x) \quad \text{as} \quad n \to \infty.
+\end{equation} This result is very important because it ensures that the
+causal forest estimator will recover the correct treatment effects at
+each data point \(x\) as the sample size grows, making it a reliable
+tool for statistical inference. To achieve pointwise consistency, one
+additional assumption is needed, and that is that both conditional mean
+functions \(\mathbb{E}[ Y(0) | X = x ]\) and
+\(\mathbb{E}[ Y(1) | X = x ]\) are Lipschnitz-continuous.
+
+\subsubsection{Asymptotic Normality}\label{asymptotic-normality}
+
+The second fundamental result of Wager and Athey (2018) is
+\textbf{asymptotic normality}. This result states that, under certain
+conditions, the treatment effect estimator \(\hat{\tau}(x)\) is
+asymptotically normally distributed around the true treatment effect
+\(\tau(x)\).
+
+\textbf{Theorem 1 (Asymptotic Normality)}\footnote{This theorem is
+  adapted from Wager and Athey (2018).}:
+
+\textit{Let $(\textbf{X}_i, Y_i, W_i)_{i=1}^n$ be $n$ i.i.d. training examples, where:}
+
+\begin{itemize}
+\item
+  \textit{$\textbf{X}_i \in [0,1]^d$ are the covariates,}
+\item
+  \textit{$Y_i \in \mathbb{R}$ is the observed outcomes,}
+\item
+  \textit{$W_i \in \{0,1\}$ indicates the binary treatment assignment.}
+\end{itemize}
+
+\textit{Suppose that these training examples satisfy the following conditions:}
+
+\begin{itemize}
+\item
+  \textit{The treatment assignment $W_i$ is unconfounded and has overlap,}
+\item
+  \textit{The conditional means $\mathbb{E}[ Y(0) | \textbf{X} = x ]$ and $\mathbb{E}[ Y(1) | \textbf{X} = x ]$ are Lipschnitz-continuous,}
+\item
+  \textit{The conditional variance is bounded, i.e.}
+  \(\text{sup}_x \text{Var} (Y | \textbf{X} = x) < \infty\).
+\item
+  \textit{The covariates are \textbf{independent} and \textbf{uniformly distributed}, i.e. $\textbf{X}_i \sim \mathcal{U}([0,1]^d)$.}
+\end{itemize}
+
+\textit{Given these conditions, let $\Gamma$ be an \textbf{honest} causal forest, where:}
+
+\begin{itemize}
+\item
+  \textit{Each causal tree is built on a random subsample of size $s_n \propto n^\beta$ for some $\beta_{min} < \beta < 1$, where $\beta_{min}$ depends on covariate dimension $d$ and regularity parameter $\alpha$,}
+\item
+  \textit{each causal tree is $𝛂$\textbf{-regular}, meaning that every split sends at least an $\alpha$-fraction of the subsample to each child node (in this case, $\alpha \le 0.2$ is used),}
+\end{itemize}
+
+\textit{Then, for any fixed covariate $x \in [0,1]^d$, the treatment effect estimator $\hat{\tau}(x)$ is \textbf{asymptotically normal} and \textbf{centered}. That is:}
+\begin{equation} \label{eq:5}
+\frac{\left(\hat{\tau}(x) - \tau(x)\right)}{\sqrt{\text{Var}\left(\hat{\tau}(x)\right)}} \xrightarrow{d} \mathcal{N}(0,1) \quad \text{as} \quad n \to \infty.
+\end{equation}
+\textit{Furthermore, the infinitesimal jackknife}\footnote{The
+  infinitesimal jackknife is the name of a variance estimation method
+  for random forests developed by Efron (2014) and Wager, Hastie, and
+  Efron (2013).} \textit{(IJ) variance estimator, which is defined as:}
+\begin{equation} \label{eq:6}
+\hat{V}_{IJ}(x) = \frac{n-1}{n}\left(\frac{n}{n-s}\right)^2 \sum_{i=1}^{n} \left(\text{Cov}_{\ast}\left[\hat{\tau}^{\ast}_{b}(x), N_{ib}^{\ast}\right]\right)^2,
+\end{equation}
+\textit{where $\hat{\tau}^{\ast}_b(x)$ is the treatment effect estimate given by the $b$-th tree, and $N_{ib}^{\ast} \in \{0,1\}$ indicates whether the training example $i$ was used for the $b$-th tree, is a consistent estimator of the variance, in the sense that:}
+\begin{equation} \label{eq:7}
+\frac{\hat{V}_{IJ}(x)}{\text{Var}(\hat{\tau}(x))} \xrightarrow{p} 1
+\quad \text{as} \quad n \to \infty.
+\end{equation}
+
+\qquad This result establishes causal forests as a method suitable not
+only for the flexible, nonparametric estimation of heterogeneous
+treatment effects, but also for conducting
+\textbf{asymptotically valid statistical inference}. The asymptotic
+normality of the estimator enables the construction of confidence
+intervals around the estimated treatment effect at each point \(x\),
+thereby allowing researchers to quantify uncertainty in a principled
+way, i.e. \begin{equation} \label{eq:8}
+\hat{\tau}(x) \pm z_{1 - \frac{\alpha}{2}} \cdot \sqrt{\hat{V}_{IJ}(x)},
+\end{equation} where \(z_{\alpha/2}\) is the critical value from the
+standard normal distribution corresponding to the desired confidence
+level.
+
+\qquad However, the conditions and assumptions that underlie the causal
+forest construction in \textbf{Theorem 1} are crucial to the asymptotic
+normality result. For instance, the estimator may become biased if the
+honesty condition is broken, which would mean that the same data is used
+to estimate treatment effects within leaves as well as to choose tree
+splits. Confidence intervals may become invalid as a result of this
+bias, which compromises the central limit theorem that underpins sound
+inference. Consequently, the method's theoretical guarantees, such as
+consistency and reliable statistical inference, might no longer be valid
+in the absence of these structural safeguards.
+
+\section{Empirical Analysis}\label{empirical-analysis}
+
+\section{Discussion}\label{discussion}
+
+\section{Conclusion}\label{conclusion}
+
+\appendix
+
+\section{\texorpdfstring{Appendix
+\label{appendixa}}{Appendix }}\label{appendix}
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\pagestyle{plain}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-athey2019}
+Athey, Susan, and Stefan Wager. 2019. {``Estimating Treatment Effects
+with Causal Forests: An Application.''}
+\url{https://doi.org/10.48550/ARXIV.1902.07409}.
+
+\bibitem[\citeproctext]{ref-breiman2001}
+Breiman, Leo. 2001. \emph{Machine Learning} 45 (1): 5--32.
+\url{https://doi.org/10.1023/a:1010933404324}.
+
+\bibitem[\citeproctext]{ref-cattaneo2022}
+Cattaneo, Matias D., Jason M. Klusowski, and Peter M. Tian. 2022. {``On
+the Pointwise Behavior of Recursive Partitioning and Its Implications
+for Heterogeneous Causal Effect Estimation.''}
+\url{https://doi.org/10.48550/ARXIV.2211.10805}.
+
+\bibitem[\citeproctext]{ref-davis2017}
+Davis, Jonathan M. V., and Sara B. Heller. 2017. {``Using Causal Forests
+to Predict Treatment Heterogeneity: An Application to Summer Jobs.''}
+\emph{American Economic Review} 107 (5): 546--50.
+\url{https://doi.org/10.1257/aer.p20171000}.
+
+\bibitem[\citeproctext]{ref-efron2014}
+Efron, Bradley. 2014. {``Estimation and Accuracy After Model
+Selection.''} \emph{Journal of the American Statistical Association} 109
+(507): 991--1007. \url{https://doi.org/10.1080/01621459.2013.823775}.
+
+\bibitem[\citeproctext]{ref-gavrilova2025}
+Gavrilova, Evelina, Audun Langørgen, and Floris T. Zoutman. 2025.
+{``Difference{-}in{-}Difference Causal Forests With an Application to
+Payroll Tax Incidence in Norway.''} \emph{Journal of Applied
+Econometrics}, July. \url{https://doi.org/10.1002/jae.70001}.
+
+\bibitem[\citeproctext]{ref-lechner2018}
+Lechner, Michael. 2018. {``Modified Causal Forests for Estimating
+Heterogeneous Causal Effects.''}
+\url{https://doi.org/10.48550/ARXIV.1812.09487}.
+
+\bibitem[\citeproctext]{ref-susukida2024}
+Susukida, Ryoko, Masoumeh Amin-Esmaeili, Elena Badillo-Goicoechea, Trang
+Q. Nguyen, Elizabeth A. Stuart, Michael Rosenblum, Kelly E. Dunn, and
+Ramin Mojtabai. 2024. {``Application of Causal Forest Model to Examine
+Treatment Effect Heterogeneity in Substance Use Disorder Psychosocial
+Treatments.''} \emph{International Journal of Methods in Psychiatric
+Research} 34 (1). \url{https://doi.org/10.1002/mpr.70011}.
+
+\bibitem[\citeproctext]{ref-wager2018}
+Wager, Stefan, and Susan Athey. 2018. {``Estimation and Inference of
+Heterogeneous Treatment Effects Using Random Forests.''} \emph{Journal
+of the American Statistical Association} 113 (523): 1228--42.
+\url{https://doi.org/10.1080/01621459.2017.1319839}.
+
+\bibitem[\citeproctext]{ref-wager2013}
+Wager, Stefan, Trevor Hastie, and Bradley Efron. 2013. {``Confidence
+Intervals for Random Forests: The Jackknife and the Infinitesimal
+Jackknife.''} \url{https://doi.org/10.48550/ARXIV.1311.4555}.
+
+\end{CSLReferences}
+
+
+
+\end{document}
